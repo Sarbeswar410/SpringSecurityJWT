@@ -1,6 +1,8 @@
 package com.Jwt.jwt.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,5 +22,16 @@ public class UserCreateController {
 		return message;
 		
 	}
+	
+	
+	@DeleteMapping("/deleteUser/{id}")
+	public String deleteUser(@PathVariable Integer id) {
+		String message= userService.deleteUser(id);
+		return message;
+		
+	}
+		
+	
+	
 
 }

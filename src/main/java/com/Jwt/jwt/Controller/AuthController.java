@@ -46,10 +46,9 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
 
-		this.doAuthenticate(request.getUserName(), request.getPassword());
+		this.doAuthenticate(request.getEmail(), request.getPassword());
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUserName());
-		System.out.println("****" + userDetails);
+		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 		String token = this.helper.generateToken(userDetails);
 		logger.info(token);
 		JwtResponse response = JwtResponse.builder().jwtToken(token).username(userDetails.getUsername()).build();
@@ -60,7 +59,6 @@ public class AuthController {
 
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userName,
 				password);
-		System.out.println("&&&&&&&" + authentication);
 		try {
 			manager.authenticate(authentication);
 
