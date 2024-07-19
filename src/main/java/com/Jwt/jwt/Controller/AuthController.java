@@ -1,8 +1,10 @@
 package com.Jwt.jwt.Controller;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,13 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Jwt.jwt.Models.JwtRequest;
 import com.Jwt.jwt.Models.JwtResponse;
 import com.Jwt.jwt.Security.JwtHelperClass;
+import com.Jwt.jwt.Service.UserService;
 
 @RestController
 @RequestMapping("/auth")
+//@CrossOrigin(origins = "http://localhost:4200")
+
 public class AuthController {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
+	@Autowired
+	UserService service;
 
 	@Autowired
 	private AuthenticationManager manager;
@@ -38,18 +46,21 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
 
-		this.doAuthenticate(request.getEmail(), request.getPassword());
+		this.doAuthenticate(request.getUserName(), request.getPassword());
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUserName());
+		System.out.println("****" + userDetails);
 		String token = this.helper.generateToken(userDetails);
-
+		logger.info(token);
 		JwtResponse response = JwtResponse.builder().jwtToken(token).username(userDetails.getUsername()).build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	private void doAuthenticate(String email, String password) {
+	private void doAuthenticate(String userName, String password) {
 
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userName,
+				password);
+		System.out.println("&&&&&&&" + authentication);
 		try {
 			manager.authenticate(authentication);
 
