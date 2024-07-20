@@ -32,7 +32,7 @@ public class UserService {
 			user.setAbout(jwtUser.getAbout());
 			user.setPassword(passwordEncoder.encode(jwtUser.getPassword()));
 			jwtUserrepo.save(user);
-			Message = "Data SAved Successfully";
+			Message = "Data Saved Successfully" + "  " + user.getUsername();
 			return Message;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -42,14 +42,17 @@ public class UserService {
 	}
 
 	public String deleteUser(Integer id) {
-		String message="";
-		try {
-			jwtUserrepo.deleteById(id);
-			message="User Deleted Successfylly By Ritik Bia Pagala";
-
-		} catch (Exception e) {
-			e.printStackTrace();
-
+		String message = "";
+		if (jwtUserrepo.existsById(id)) {
+			try {
+				jwtUserrepo.deleteById(id);
+				message = "User deleted successfully by Ritik Bia Pagala";
+			} catch (Exception e) {
+				e.printStackTrace();
+				message = "An error occurred while deleting the user.";
+			}
+		} else {
+			message = "User with ID " + id + " not found.";
 		}
 		return message;
 	}
