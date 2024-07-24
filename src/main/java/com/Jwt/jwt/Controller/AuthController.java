@@ -23,6 +23,7 @@ import com.Jwt.jwt.Models.JwtRequest;
 import com.Jwt.jwt.Models.JwtResponse;
 import com.Jwt.jwt.Security.JwtHelperClass;
 import com.Jwt.jwt.Service.UserService;
+import com.Jwt.jwt.Utility.ServiceResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -44,15 +45,23 @@ public class AuthController {
 	private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@PostMapping("/login")
-	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
+	public ServiceResponse login(@RequestBody JwtRequest request) {
+		ServiceResponse response = new ServiceResponse();
+		try {
+			this.doAuthenticate(request.getEmail(), request.getPassword());
 
-		this.doAuthenticate(request.getEmail(), request.getPassword());
+			UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+			String token = this.helper.generateToken(userDetails);
+			logger.info(token);
+			JwtResponse jwtResponse = JwtResponse.builder().jwtToken(token).username(userDetails.getUsername()).build();
+			response.setServiceResponse(jwtResponse);
+			response.setServiceStatus(response.STATUS_SUCCESS);
 
-		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-		String token = this.helper.generateToken(userDetails);
-		logger.info(token);
-		JwtResponse response = JwtResponse.builder().jwtToken(token).username(userDetails.getUsername()).build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (Exception e) {
+			response.setServiceStatus(response.STATUS_FAIL);
+		}
+
+		return response;
 	}
 
 	private void doAuthenticate(String userName, String password) {

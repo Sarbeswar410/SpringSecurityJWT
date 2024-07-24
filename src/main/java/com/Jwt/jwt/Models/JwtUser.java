@@ -34,6 +34,7 @@ public class JwtUser implements UserDetails {
 	private String name;
 	private String password;
 	private String about;
+	@Column(nullable = false, unique = true)
 	private String email;
 
 	@Override

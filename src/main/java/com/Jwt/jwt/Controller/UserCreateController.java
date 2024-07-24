@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Jwt.jwt.Models.JwtUser;
 import com.Jwt.jwt.Service.UserService;
+import com.Jwt.jwt.Utility.ServiceResponse;
 
 @RequestMapping("/user")
 @RestController
@@ -17,9 +18,9 @@ public class UserCreateController {
 	@Autowired
 	UserService userService;
 	@PostMapping("/createUser")
-	public String createUser(@RequestBody JwtUser jwtUser) {
-		String message=userService.createJwtUser(jwtUser);
-		return message;
+	public ServiceResponse createUser(@RequestBody JwtUser jwtUser) {
+		ServiceResponse response=userService.createJwtUser(jwtUser);
+		return response;
 		
 	}
 	
