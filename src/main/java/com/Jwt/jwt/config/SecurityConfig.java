@@ -39,7 +39,8 @@ public class SecurityConfig {
 //		 cors(cors -> cors.disable())
 				cors(cors -> cors.configurationSource(corsConfigurationSource()))
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/**").authenticated()
-						.requestMatchers("/auth/login").permitAll().requestMatchers("/user/createUser").permitAll().anyRequest().authenticated())
+						.requestMatchers("/auth/login").permitAll().requestMatchers("/user/createUser").permitAll()
+						.anyRequest().authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
@@ -49,7 +50,10 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+//		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+//		configuration.setAllowedOrigins(Arrays.asList("*")); // Allow all origins
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://192.168.1.11:4200"));
+
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

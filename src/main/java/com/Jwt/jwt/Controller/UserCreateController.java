@@ -1,6 +1,7 @@
 package com.Jwt.jwt.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import com.Jwt.jwt.Utility.ServiceResponse;
 
 @RequestMapping("/user")
 @RestController
+@CrossOrigin(origins = "http://192.168.1.11:4200", allowedHeaders = "*")
 public class UserCreateController {
 	@Autowired
 	UserService userService;
