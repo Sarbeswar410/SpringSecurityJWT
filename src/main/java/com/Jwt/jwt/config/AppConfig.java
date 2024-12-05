@@ -21,26 +21,29 @@ import com.Jwt.jwt.Repository.jwtUserRepository;
 
 @Configuration
 public class AppConfig {
+	//yuuyb
+//	hbvuuguygyg
+	//Commit Check
 	@Autowired
 	jwtUserRepository userRepository;
-	@Bean
-	public UserDetailsService userDetailsService() {
-		  List<JwtUser> users = userRepository.findAll();
-		  System.out.println(users);
-
-		  List<UserDetails> userDetailsList = new ArrayList<>();
-	        for (JwtUser user : users) {
-	            UserDetails userDetails = User.builder()
-	                    .username(user.getUserName())
-	                    .password(passwordEncoder().encode(user.getPassword()))
-	                    .roles(user.getRole())
-	                    .build();
-	            userDetailsList.add(userDetails);
-	        }
-
-	        return new InMemoryUserDetailsManager(userDetailsList);
-
-	}
+//	@Bean
+//	public UserDetailsService userDetailsService() {
+//		  List<JwtUser> users = userRepository.findAll();
+//		  System.out.println(users);
+//
+//		  List<UserDetails> userDetailsList = new ArrayList<>();
+//	        for (JwtUser user : users) {
+//	            UserDetails userDetails = User.builder()
+//	                    .username(user.getName())
+//	                    .password(passwordEncoder().encode(user.getPassword()))
+//	                    .roles(user.getRole())
+//	                    .build();
+//	            userDetailsList.add(userDetails);
+//	        }
+//
+//	        return new InMemoryUserDetailsManager(userDetailsList);
+//
+//	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
